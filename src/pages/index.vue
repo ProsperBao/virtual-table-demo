@@ -6,6 +6,6 @@ defineOptions({
 
 <template>
   <div>
-    HELLO WORLD
+    <el-button>HELLO WORLD</el-button>
   </div>
 </template>

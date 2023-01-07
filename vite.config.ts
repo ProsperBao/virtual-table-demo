@@ -9,6 +9,7 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Unocss from 'unocss/vite'
 import VueMacros from 'unplugin-vue-macros/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import vueJsx from '@vitejs/plugin-vue-jsx'
 
 export default defineConfig({
   resolve: {
@@ -22,8 +23,10 @@ export default defineConfig({
         vue: Vue({
           reactivityTransform: true,
         }),
+
       },
     }),
+    vueJsx(),
 
     // https://github.com/hannoeru/vite-plugin-pages
     Pages(),

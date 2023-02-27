@@ -1,5 +1,5 @@
 export interface IDataItem {
-  id: number
+  id: string
   scheme: string
   network: string
   memory: string
@@ -95,7 +95,7 @@ export const specList: ISpecItem[] = [
   },
 ]
 
-export function init() {
+export function init(): IDataItem[] {
   const result = specList.reduce<Partial<IDataItem>[]>((acc, cur) => {
     const specList: Partial<IDataItem>[] = []
     if (!acc.length)

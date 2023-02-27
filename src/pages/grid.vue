@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { ColDef } from 'ag-grid-community'
+import type { CellClassParams, ColDef, RowSpanParams } from 'ag-grid-community'
 import { AgGridVue } from 'ag-grid-vue3'
 import { init, otherData, specList } from '~/utils/init'
 import { calcMerge } from '~/utils/merge'
@@ -14,7 +14,7 @@ const dataSource = ref<IDataItem[]>([])
 const columns = ref<any[]>([])
 const merges = ref<number[][]>([])
 
-function mergeCellStyle(params: CellClassParams<RelLeaseTable>) {
+function mergeCellStyle(params: CellClassParams<IDataItem>) {
   const columnIndex = params.colDef.cellRendererParams.idx
   const rowIndex = params.node!.rowIndex!
   const merge = merges.value[rowIndex][columnIndex]
@@ -32,7 +32,7 @@ function mergeCellStyle(params: CellClassParams<RelLeaseTable>) {
     whiteSpace: 'break-spaces',
   }
 }
-function mergeCellRowSpan(params: RowSpanParams<RelLeaseTable>) {
+function mergeCellRowSpan(params: RowSpanParams<IDataItem>) {
   const columnIndex = params.colDef.cellRendererParams.idx
   const rowIndex = params.node!.rowIndex!
   return merges.value[rowIndex][columnIndex]
@@ -45,7 +45,7 @@ function initColumns() {
   columns.value = [
     ...specList,
     ...otherData.map(item => ({ label: item, value: item })),
-  ].reduce<Partial<TTableColumn>[]>((acc, cur, idx) => [
+  ].reduce<Partial<TableColumn>[]>((acc, cur, idx) => [
     ...acc,
     {
       headerName: cur.label,
@@ -56,12 +56,12 @@ function initColumns() {
             cellRenderer: GridInputCell,
           }
         : {
-            cellStyle: params => ({ ...mergeCellStyle(params), lineHeight: '20px' }),
+            cellStyle: (params: CellClassParams<IDataItem>) => ({ ...mergeCellStyle(params), lineHeight: '20px' }),
             cellRendererParams: { idx },
             rowSpan: mergeCellRowSpan,
           }),
     },
-  ], []) as TTableColumn[]
+  ], []) as TableColumn[]
 }
 function calcColumnMerge() {
   merges.value = calcMerge(dataSource.value, specList)
@@ -75,7 +75,7 @@ const gridOptions = ref({
   suppressRowDrag: true, // 禁用行拖动
   suppressMovableColumns: true, // 禁用列拖动
   suppressCellFocus: true, // 禁用键盘选中
-  getRowId(data) {
+  getRowId(data: { data: { id: string } }) {
     return data.data.id
   },
 })

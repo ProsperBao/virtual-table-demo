@@ -1,5 +1,5 @@
 import type { FunctionalComponent } from 'vue'
-import type { CellRenderProps } from 'element-plus'
+import type { InputInstance } from 'element-plus'
 import { ElInput, ElTooltip } from 'element-plus'
 
 interface SelectionCellProps {
@@ -19,7 +19,7 @@ const InputCell: FunctionalComponent<SelectionCellProps> = ({
   )
 }
 
-export function ElInputCell({ rowData, cellData, column }: CellRenderProps): FunctionalComponent<SelectionCellProps> {
+export function ElInputCell({ rowData, cellData, column }: any): FunctionalComponent<SelectionCellProps> {
   const onChange = (value: string) => {
     rowData[column.dataKey!] = value
   }
@@ -32,25 +32,25 @@ export function ElInputCell({ rowData, cellData, column }: CellRenderProps): Fun
 
   const onExitEditMode = () => (rowData._editing[column.dataKey!] = false)
   const input = ref()
-  const setRef = (el) => {
+  const setRef = (el: any) => {
     input.value = el
     if (el)
       el.focus?.()
   }
 
-  return rowData?._editing?.[column.dataKey!]
+  return () => rowData?._editing?.[column.dataKey!]
     ? (
-        <InputCell
-          forwardRef={setRef}
-          value={rowData[column.dataKey!]}
-          onChange={onChange}
-          onBlur={onExitEditMode}
-          onKeydownEnter={onExitEditMode}
-        />
+    <InputCell
+      forwardRef={setRef}
+      value={rowData[column.dataKey!]}
+      onChange={onChange}
+      onBlur={onExitEditMode}
+      onKeydownEnter={onExitEditMode}
+    />
       )
     : (
-      <ElTooltip content={`${cellData}`} placement="top" effect="customized">
-        <div onClick={onEnterEditMode}>{cellData}</div>
-      </ElTooltip>
+    <ElTooltip content={`${cellData}`} placement="top" effect="customized">
+      <div onClick={onEnterEditMode}>{cellData}</div>
+    </ElTooltip>
       )
 }

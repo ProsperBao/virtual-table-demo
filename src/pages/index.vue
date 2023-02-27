@@ -3,7 +3,9 @@ import type { CellRenderProps, Column } from 'element-plus'
 import type { CSSProperties, VNode } from 'vue'
 import { cloneVNode } from 'vue'
 import { ElInputCell } from '~/components/ElInputCell'
-import { initData, otherData, specList } from '~/utils/initData'
+import type { IDataItem } from '~/utils/init'
+import { init, otherData, specList } from '~/utils/init'
+import { calcMerge } from '~/utils/merge'
 
 interface RowSlotProps {
   columnIndex: number
@@ -19,16 +21,7 @@ defineOptions({
   name: 'Home Page',
 })
 
-interface IDataItem {
-  id: number
-  scheme: string
-  network: string
-  memory: string
-  color: string
-  degree: string
-}
-
-type TTableColumn = Column<IDataItem>
+type TableColumn = Column<IDataItem>
 
 const dataSource = ref<IDataItem[]>([])
 const columns = ref<Column[]>([])
@@ -36,60 +29,28 @@ const merges = ref<number[][]>([])
 const dataLen = ref<number[]>([])
 
 function initDataSource() {
-  dataSource.value = initData()
+  dataSource.value = init()
 }
 function initColumns() {
   columns.value = [
     ...specList,
     ...otherData.map(item => ({ label: item, value: item })),
-  ].reduce<Partial<TTableColumn>[]>((acc, cur) => [
+  ].reduce<Partial<TableColumn>[]>((acc, cur, idx) => [
     ...acc,
     {
       title: cur.label,
       dataKey: cur.value,
       width: 100,
-      cellRenderer: (props: CellRenderProps) => ElInputCell(props),
+      ...(idx > specList.length - 1
+        ? {
+            cellRenderer: (props: CellRenderProps) => ElInputCell(props),
+          }
+        : {}),
     },
-  ], []) as TTableColumn[]
+  ], []) as TableColumn[]
 }
 function calcColumnMerge() {
-  // 制作映射查表
-  const mergeKeys = specList.map(item => item.value)
-  const mergeColLen = mergeKeys.length
-  const mergeMap: number[][] = new Array(dataSource.value.length).fill([])
-    .map(() => [...new Array(mergeColLen - 1).fill(0), 1])
-
-  const data = dataSource.value
-
-  // 开始计算行
-  for (let rowIndex = 0; rowIndex < mergeMap.length; rowIndex++) {
-    const row = data[rowIndex]
-    const pre = rowIndex > 0 ? data[rowIndex - 1] : null
-    // 开始计算列
-    for (let columnIndex = 0; columnIndex < mergeColLen; columnIndex++) {
-      const colKey = mergeKeys[columnIndex]
-      if (rowIndex === 0 || (pre && pre[colKey] !== row[colKey])) {
-        let rowspan = 1
-        // 向下查找
-        for (let i = rowIndex + 1; i < mergeMap.length; i++) {
-          const cur = data[i]
-          if (cur && row[colKey] === cur[colKey])
-            rowspan++
-          else
-            break
-        }
-        mergeMap[rowIndex][columnIndex] = rowspan
-      }
-      else if (pre && pre[colKey] === row[colKey]) {
-        mergeMap[rowIndex][columnIndex] = mergeMap[rowIndex - 1][columnIndex] - 1
-      }
-      else {
-        mergeMap[rowIndex][columnIndex] = 0
-      }
-    }
-  }
-
-  merges.value = mergeMap
+  merges.value = calcMerge(dataSource.value, specList)
 
   specList.reduce((acc, cur) => {
     const res = acc / cur.options.length
@@ -127,7 +88,7 @@ const Row = ({ rowIndex, cells }: RowSlotProps) => {
 
 <template>
   <div>
-    <el-table-v2 :columns="columns" :data="dataSource" :width="700" :height="400" fixed>
+    <el-table-v2 :columns="columns" border :data="dataSource" :width="700" :height="400" fixed>
       <template #row="props">
         <Row v-bind="props" />
       </template>

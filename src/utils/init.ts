@@ -1,9 +1,18 @@
-interface IOptionItem {
+export interface IDataItem {
+  id: number
+  scheme: string
+  network: string
+  memory: string
+  color: string
+  degree: string
+}
+
+export interface IOptionItem {
   label: string
   value: string
 }
 
-interface ISpecItem extends IOptionItem {
+export interface ISpecItem extends IOptionItem {
   value: keyof IDataItem
   options: IOptionItem[]
 }
@@ -86,12 +95,13 @@ export const specList: ISpecItem[] = [
   },
 ]
 
-export function initData() {
-  return specList.reduce<Partial<IDataItem>[]>((acc, cur) => {
+export function init() {
+  const result = specList.reduce<Partial<IDataItem>[]>((acc, cur) => {
     const specList: Partial<IDataItem>[] = []
     if (!acc.length)
       return cur.options.map(option => ({ [cur.value]: option.value, ...otherData.reduce((acc, cur) => ({ ...acc, [cur]: cur }), {}) }))
     acc.forEach(item => cur.options.forEach(option => specList.push({ ...item, [cur.value]: option.value })))
     return specList
   }, []) as IDataItem[]
+  return result.map(result => ({ ...result, id: Object.entries(result).map(i => i[1]).join('&') }))
 }

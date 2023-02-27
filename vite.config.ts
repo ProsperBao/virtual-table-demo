@@ -51,6 +51,7 @@ export default defineConfig({
     Components({
       dts: true,
       resolvers: [ElementPlusResolver()],
+      extensions: ['vue', 'tsx'],
     }),
 
     // https://github.com/antfu/unocss

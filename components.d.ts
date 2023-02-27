@@ -7,8 +7,11 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    ElInput: typeof import('element-plus/es')['ElInput']
     ElInputCell: typeof import('./src/components/ElInputCell.tsx')['default']
     ElTableV2: typeof import('element-plus/es')['ElTableV2']
+    ElTooltip: typeof import('element-plus/es')['ElTooltip']
+    GridInputCell: typeof import('./src/components/GridInputCell.vue')['default']
     InputCell: typeof import('./src/components/InputCell.tsx')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

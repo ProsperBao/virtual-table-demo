@@ -6,6 +6,7 @@ import { calcMerge } from '~/utils/merge'
 import type { IDataItem } from '~/utils/init'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
+import GridInputCell from '~/components/GridInputCell.vue'
 
 type TableColumn = ColDef<IDataItem>
 
@@ -52,7 +53,7 @@ function initColumns() {
       width: 100,
       ...(idx > specList.length - 1
         ? {
-
+            cellRenderer: GridInputCell,
           }
         : {
             cellStyle: params => ({ ...mergeCellStyle(params), lineHeight: '20px' }),

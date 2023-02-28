@@ -19,7 +19,7 @@ const InputCell: FunctionalComponent<SelectionCellProps> = ({
   )
 }
 
-export function ElInputCell({ rowData, cellData, column }: any): FunctionalComponent<SelectionCellProps> {
+export function ElInputCell({ rowData, cellData, column }: any) {
   const onChange = (value: string) => {
     rowData[column.dataKey!] = value
   }
@@ -38,7 +38,7 @@ export function ElInputCell({ rowData, cellData, column }: any): FunctionalCompo
       el.focus?.()
   }
 
-  return () => rowData?._editing?.[column.dataKey!]
+  return rowData?._editing?.[column.dataKey!]
     ? (
     <InputCell
       forwardRef={setRef}

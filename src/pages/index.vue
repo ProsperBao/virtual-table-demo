@@ -1,5 +1,5 @@
 <script setup lang="tsx">
-import type { CellRenderProps, Column } from 'element-plus'
+import type { Column } from 'element-plus'
 import type { CSSProperties, VNode } from 'vue'
 import { cloneVNode } from 'vue'
 import { ElInputCell } from '~/components/ElInputCell'
@@ -41,11 +41,7 @@ function initColumns() {
       title: cur.label,
       dataKey: cur.value,
       width: 100,
-      ...(idx > specList.length - 1
-        ? {
-            cellRenderer: (props: CellRenderProps) => ElInputCell(props),
-          }
-        : {}),
+      ...(idx > specList.length - 1 ? { cellRenderer: props => ElInputCell(props) } : {}),
     },
   ], []) as TableColumn[]
 }

@@ -7,13 +7,24 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    AnimateButton: typeof import('./src/components/AnimateButton.tsx')['default']
+    ElButton: typeof import('element-plus/es')['ElButton']
+    ElCheckbox: typeof import('element-plus/es')['ElCheckbox']
+    ElCheckboxGroup: typeof import('element-plus/es')['ElCheckboxGroup']
     ElInput: typeof import('element-plus/es')['ElInput']
     ElInputCell: typeof import('./src/components/ElInputCell.tsx')['default']
+    ElLink: typeof import('element-plus/es')['ElLink']
+    ElPopover: typeof import('element-plus/es')['ElPopover']
+    ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     ElTableV2: typeof import('element-plus/es')['ElTableV2']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
-    GridInputCell: typeof import('./src/components/GridInputCell.vue')['default']
+    GridFilter: typeof import('./src/components/GridFilter/index.vue')['default']
+    GridInputCell: typeof import('./src/components/GridInputCell/index.vue')['default']
+    GridPopover: typeof import('./src/components/GridPopover.vue')['default']
     InputCell: typeof import('./src/components/InputCell.tsx')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SuccessButton: typeof import('./src/components/GridFilter/SuccessButton.tsx')['default']
+    SuccessLink: typeof import('./src/components/GridFilter/SuccessLink.tsx')['default']
   }
 }

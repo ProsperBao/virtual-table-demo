@@ -5,6 +5,7 @@ export interface IDataItem {
   memory: string
   color: string
   degree: string
+  [key: string]: any
 }
 
 export interface IOptionItem {
@@ -13,7 +14,7 @@ export interface IOptionItem {
 }
 
 export interface ISpecItem extends IOptionItem {
-  value: keyof IDataItem
+  value: keyof IDataItem & string
   options: IOptionItem[]
 }
 

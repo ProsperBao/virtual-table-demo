@@ -7,7 +7,7 @@ export function useCellEditing() {
   const onEnterEditMode = () => {
     editing.value = true
     visible.value = false
-    inputRef.value && setTimeout(inputRef.value.focus)
+    setTimeout(() => inputRef.value?.focus())
   }
 
   return {
@@ -30,6 +30,10 @@ export function usePopover(callback?: Function) {
     unref(popoverRef).popperRef?.delayShow?.()
   }
   function onClickOutside() {
+    // 提前隐藏，否则会有闪烁
+    const contentRef = unref(popoverRef)?.popperRef?.contentRef
+    contentRef && (contentRef.style.display = 'none')
+
     unref(popoverRef).popperRef?.delayHide?.()
     callback?.()
   }

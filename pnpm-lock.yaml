@@ -10,6 +10,7 @@ specifiers:
   '@vitejs/plugin-vue-jsx': ^3.0.0
   '@vue-macros/volar': ^0.5.15
   '@vue/test-utils': ^2.3.0
+  '@vueuse/components': ^9.13.0
   '@vueuse/core': ^9.13.0
   ag-grid-vue3: ^29.1.0
   element-plus: ^2.2.32
@@ -33,6 +34,7 @@ specifiers:
 
 dependencies:
   '@types/lodash-es': registry.npmmirror.com/@types/lodash-es/4.17.6
+  '@vueuse/components': registry.npmmirror.com/@vueuse/components/9.13.0_vue@3.2.47
   '@vueuse/core': registry.npmmirror.com/@vueuse/core/9.13.0_vue@3.2.47
   ag-grid-vue3: registry.npmmirror.com/ag-grid-vue3/29.1.0
   element-plus: registry.npmmirror.com/element-plus/2.2.32_vue@3.2.47
@@ -2231,6 +2233,20 @@ packages:
       '@vue/compiler-dom': registry.npmmirror.com/@vue/compiler-dom/3.2.47
       '@vue/server-renderer': registry.npmmirror.com/@vue/server-renderer/3.2.47_vue@3.2.47
     dev: true
+
+  registry.npmmirror.com/@vueuse/components/9.13.0_vue@3.2.47:
+    resolution: {integrity: sha512-UJ8PjQ4SGb2rsVIy9vhEc6aCu+3+2cc+xEfGNX8/M1NKIuL2Vo6c2Kc2fYFaRzWZkP8HWXu+IcwvnAzL44IEFA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@vueuse/components/-/components-9.13.0.tgz}
+    id: registry.npmmirror.com/@vueuse/components/9.13.0
+    name: '@vueuse/components'
+    version: 9.13.0
+    dependencies:
+      '@vueuse/core': registry.npmmirror.com/@vueuse/core/9.13.0_vue@3.2.47
+      '@vueuse/shared': registry.npmmirror.com/@vueuse/shared/9.13.0_vue@3.2.47
+      vue-demi: registry.npmmirror.com/vue-demi/0.13.11_vue@3.2.47
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - vue
+    dev: false
 
   registry.npmmirror.com/@vueuse/core/9.13.0_vue@3.2.47:
     resolution: {integrity: sha512-pujnclbeHWxxPRqXWmdkKV5OX4Wk4YeK7wusHqRwU0Q7EFusHoqNA/aPhB6KCh9hEqJkLAJo7bb0Lh9b+OIVzw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@vueuse/core/-/core-9.13.0.tgz}

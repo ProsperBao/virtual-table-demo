@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { ICellRendererParams } from 'ag-grid-community'
-import { ClickOutside as vClickOutside } from 'element-plus'
+import { vOnClickOutside } from '@vueuse/components'
 import { get, set } from 'lodash-es'
 import { useCellEditing, usePopover } from '.'
 import type { IDataItem } from '~/utils/init'
@@ -24,32 +24,42 @@ const disabled = $computed(() => {
 })
 
 const { editing, inputRef, onExitEditMode, onEnterEditMode } = useCellEditing()
-const { setDispatchRef, onClickOutside } = usePopover(onExitEditMode)
+const { setDispatchRef } = usePopover(onExitEditMode)
 </script>
 
 <template>
-  <div v-click-outside="onClickOutside" :class="{ disabled }" class="grid-input-cell" w-full h-full @mouseenter="(e) => setDispatchRef(e.currentTarget)">
+  <div v-if="disabled" class="grid-input-cell disabled" />
+  <div
+    v-else class="grid-input-cell" w-full
+    h-full
+    @mouseenter="(e) => setDispatchRef(e.currentTarget)"
+  >
     <input v-if="editing" ref="inputRef" v-model.lazy="value" @blur="onExitEditMode" @keydown.enter="onExitEditMode">
-    <div v-if="!editing" h-full class="truncate" @click="onEnterEditMode">
+    <div v-if="!editing" flex justify-center items-center h-full truncate @click="onEnterEditMode">
       {{ value }}
     </div>
   </div>
 </template>
 
-<style>
-.grid-input-cell.disabled {
-  pointer-events: none;
-  position: relative;
-  z-index: -1;
-}
-.grid-input-cell.disabled::before {
-  content: ' ';
-  position: absolute;
-  z-index: 0;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--el-fill-color-light);
+<style lang="scss">
+.grid-input-cell {
+  &.disabled::before {
+    content: ' ';
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--el-fill-color-light);
+    cursor: not-allowed;
+  }
+
+  input {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    outline: none;
+  }
 }
 </style>

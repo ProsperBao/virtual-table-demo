@@ -97,19 +97,19 @@ initDataSource()
 calcColumnMerge()
 
 const gridOptions = ref({
-  suppressRowDrag: true, // 禁用行拖动
-  suppressMovableColumns: true, // 禁用列拖动
-  suppressCellFocus: true, // 禁用键盘选中
+  suppressRowDrag: true,
+  suppressMovableColumns: true,
+  suppressCellFocus: true,
   getRowId(data: { data: { id: string } }) {
     return data.data.id
   },
 })
 
 const defaultColDef = ref({
-  wrapHeaderText: false, // th文字换行
-  autoHeaderHeight: false, // 配合th文字换行
-  wrapText: false, // td文字换行
-  autoHeight: false, // 配合td文字换行
+  wrapHeaderText: false,
+  autoHeaderHeight: false,
+  wrapText: false,
+  autoHeight: false,
   resizable: false,
 })
 
@@ -122,9 +122,14 @@ provide('filters', filters)
     <AgGridVue
       :default-col-def="defaultColDef" :grid-options="gridOptions" :suppress-row-transform="true"
       :row-height="80" :row-data="dataSource" :header-height="40" :column-defs="columns" h-400px
-      class="ag-theme-alpine ag-theme-element" :suppress-horizontal-scroll="true"
-      :suppress-vertical-scroll="true"
-    />
+      class="ag-theme-alpine ag-theme-element"
+    >
+      <AgGridColumnMenu>
+        <template>
+          <ElIcon name="el-icon-more" />
+        </template>
+      </AgGridColumnMenu>
+    </AgGridVue>
     <GridPopover />
   </div>
 </template>
@@ -152,6 +157,14 @@ provide('filters', filters)
   .ag-row-hover:not(.ag-full-width-row)::before {
     background: var(--el-fill-color-light) !important;
   }
+}
+/* Set the icon font to element plus */
+:root {
+  --ag-icon-font-family: 'element-plus';
+}
 
+/* Set the filter icon character to '\e6a7' */
+.ag-theme-alpine .ag-header-cell-menu-button {
+  --ag-icon-font-code-filter: '\e6a7';
 }
 </style>

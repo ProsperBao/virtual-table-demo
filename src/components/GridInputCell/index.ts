@@ -1,3 +1,7 @@
+import type { Component } from 'vue'
+import type { GridCellRenderProps, PropsConditionFunc } from '~/pages/grid/type'
+import type { IDataItem } from '~/utils/init'
+
 export function useCellEditing() {
   const editing = ref(false)
   const inputRef = ref()
@@ -21,6 +25,8 @@ export function useCellEditing() {
 
 const popoverRef = ref()
 const dispatchRef = ref()
+const popoverComponent = ref<Component>()
+const popoverProps = ref<GridCellRenderProps>()
 export function usePopover(callback?: Function) {
   function setPopoverRef(ref: any) {
     popoverRef.value = ref
@@ -38,11 +44,33 @@ export function usePopover(callback?: Function) {
     callback?.()
   }
 
+  function setComponent(component: Component, props: GridCellRenderProps) {
+    popoverComponent.value = component
+    popoverProps.value = props
+  }
+
   return {
     setPopoverRef,
     popoverRef,
     dispatchRef,
     onClickOutside,
     setDispatchRef,
+    component: popoverComponent,
+    popoverProps,
+    setComponent,
   }
+}
+
+export function conditionFunc({
+  props, key, data,
+}: {
+  props: GridCellRenderProps
+  key: keyof Pick<GridCellRenderProps, 'disabled' | 'readonly'>
+  data: IDataItem
+}) {
+  if (!props[key])
+    return false
+  if (typeof props[key] === 'boolean')
+    return props[key]
+  return (props[key] as PropsConditionFunc)(data, props)
 }

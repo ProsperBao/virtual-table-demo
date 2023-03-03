@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import type { CellClassParams, CellStyle, ColDef, RowSpanParams } from 'ag-grid-community'
 import { AgGridVue } from 'ag-grid-vue3'
+import { get, set } from 'lodash-es'
+import type { GridCellRenderProps } from './type'
 import { init, otherData, specList } from '~/utils/init'
 import { calcMerge } from '~/utils/merge'
 import type { IDataItem } from '~/utils/init'
@@ -53,6 +55,31 @@ function initDataSource() {
   dataSource.value = init()
 }
 function initColumns() {
+  const funcMapping: Record<string, any> = {
+    5: {
+      formatter: {
+        getter: (data: IDataItem) => `${data.degree}-${data.color}`,
+        setter: (data: IDataItem, value: string) => {
+          const [degree, color] = value.split('-')
+          data.degree = degree
+          data.color = color
+        },
+      },
+    },
+    7: {
+      formatter: {
+        getter: (data: IDataItem, colDef: ColDef<IDataItem>) => `*${get(data, colDef.field!)}*`,
+        valueGetter: (data: IDataItem, colDef: ColDef<IDataItem>) => `${get(data, colDef.field!)}`,
+      },
+    },
+    8: {
+      formatter: {
+        getter: (data: IDataItem, colDef: ColDef<IDataItem>) => `*${get(data, colDef.field!)}*`,
+        setter: (value: string, data: IDataItem, colDef: ColDef<IDataItem>) => set(data, colDef.field!, value.replace(/^\*/, '').replace(/\*$/, '')),
+      },
+    },
+  }
+
   columns.value = [
     ...specList,
     ...otherData.map(item => ({ label: item, value: item })),
@@ -67,12 +94,14 @@ function initColumns() {
             cellRenderer: GridInputCell,
             cellRendererParams: {
               idx,
-              disabled: (data: IDataItem, renderProps: any) => renderProps.idx === 6,
-            },
+              disabled: (data: IDataItem, renderProps: any) => renderProps.idx === 6 && ['degree1', 'degree2', 'degree3', 'degree4'].includes(data.degree),
+              readonly: (data: IDataItem, renderProps: any) => renderProps.idx === 7 && ['degree5', 'degree6', 'degree7', 'degree8'].includes(data.degree),
+              ...(funcMapping[`${idx}`] || {}),
+            } as GridCellRenderProps,
           }
         : {
             cellStyle: (params: CellClassParams<IDataItem>) => ({ ...mergeCellStyle(params), lineHeight: '20px' }),
-            cellRendererParams: { idx },
+            cellRendererParams: { idx } as GridCellRenderProps,
             filter: GridFilter,
             filterParams: {
               options: specList[idx].options,

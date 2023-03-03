@@ -58,11 +58,11 @@ function initColumns() {
   const funcMapping: Record<string, any> = {
     5: {
       formatter: {
-        getter: (data: IDataItem) => `${data.degree}-${data.color}`,
-        setter: (data: IDataItem, value: string) => {
-          const [degree, color] = value.split('-')
-          data.degree = degree
-          data.color = color
+        getter: (data: IDataItem) => `${data.test3}-${data.test4}`,
+        setter: (value: string, data: IDataItem) => {
+          const [test3, test4] = value.split('-')
+          data.test3 = test3
+          data.test4 = test4
         },
       },
     },
@@ -96,7 +96,10 @@ function initColumns() {
               idx,
               disabled: (data: IDataItem, renderProps: any) => renderProps.idx === 6 && ['degree1', 'degree2', 'degree3', 'degree4'].includes(data.degree),
               readonly: (data: IDataItem, renderProps: any) => renderProps.idx === 7 && ['degree5', 'degree6', 'degree7', 'degree8'].includes(data.degree),
-              ...(funcMapping[`${idx}`] || {}),
+              ...(funcMapping[idx] || {}),
+              popover: {
+                component: () => import('~/components/GridAsyncComponent.vue'),
+              },
             } as GridCellRenderProps,
           }
         : {
@@ -152,13 +155,7 @@ provide('filters', filters)
       :default-col-def="defaultColDef" :grid-options="gridOptions" :suppress-row-transform="true"
       :row-height="80" :row-data="dataSource" :header-height="40" :column-defs="columns" h-400px
       class="ag-theme-alpine ag-theme-element"
-    >
-      <AgGridColumnMenu>
-        <template>
-          <ElIcon name="el-icon-more" />
-        </template>
-      </AgGridColumnMenu>
-    </AgGridVue>
+    />
     <GridPopover />
   </div>
 </template>

@@ -1,4 +1,5 @@
 import type { ColDef } from 'ag-grid-community'
+import type { AsyncComponentLoader } from 'vue'
 import type { IDataItem } from '~/utils/init'
 
 export type PropsConditionFunc = (data: IDataItem, renderProps: GridCellRenderProps) => boolean
@@ -14,9 +15,19 @@ export interface PropsFormatter {
   setter: <T = any>(value: T, data: IDataItem, colDef: ColDef<IDataItem>) => void
 }
 
+export type HtmlString = string
+export interface PropsPopover {
+  component?: AsyncComponentLoader
+  valuePrefix?: string
+  valueSuffix?: string
+  formatter?: PropsFormatter
+  desc?: HtmlString
+}
+
 export interface GridCellRenderProps {
   idx: number
   disabled?: boolean | PropsConditionFunc
   readonly?: boolean | PropsConditionFunc
   formatter?: PropsFormatter | PropsFormatterGetter
+  popover?: PropsPopover
 }

@@ -1,3 +1,4 @@
+import { get } from 'lodash-es'
 import type { IDataItem, ISpecItem } from './init'
 
 export function calcMerge(data: IDataItem[], specList: ISpecItem[]) {
@@ -14,19 +15,19 @@ export function calcMerge(data: IDataItem[], specList: ISpecItem[]) {
     // 开始计算列
     for (let columnIndex = 0; columnIndex < mergeColLen; columnIndex++) {
       const colKey = mergeKeys[columnIndex]
-      if (rowIndex === 0 || (pre && pre[colKey] !== row[colKey])) {
+      if (rowIndex === 0 || (pre && get(pre, colKey) !== get(row, colKey))) {
         let rowspan = 1
         // 向下查找
         for (let i = rowIndex + 1; i < mergeMap.length; i++) {
           const cur = data[i]
-          if (cur && row[colKey] === cur[colKey])
+          if (cur && get(row, colKey) === get(cur, colKey))
             rowspan++
           else
             break
         }
         mergeMap[rowIndex][columnIndex] = rowspan
       }
-      else if (pre && pre[colKey] === row[colKey]) {
+      else if (pre && get(pre, colKey) === get(row, colKey)) {
         mergeMap[rowIndex][columnIndex] = mergeMap[rowIndex - 1][columnIndex] - 1
       }
       else {
